@@ -2,42 +2,66 @@ package j2fa.otp;
 
 import org.apache.commons.codec.binary.Base32;
 
-public final class OTPAuth {
+public class OTPAuth {
 	
-	private OTPAuth() {}
+	private String type = "totp";
+	private String issuer;
+	private String account;
+	private String secret; 
+	private String algo;
+	private Integer digits;
+	private Integer period;
 	
-	public static String path(String issuer, String account, byte[] secret) {
-		return path(issuer, account, secret, null, null, null);
-	}
-	
-	public static String path(String issuer, String account, byte[] secret, 
+	public OTPAuth(String issuer, String account, String secret, 
 			String algo, Integer digits, Integer period) {
-	    Base32 base32 = new Base32();
-		return path(issuer, account, base32.encodeAsString(secret), algo, digits, period);
+		if(issuer == null || issuer.isEmpty()) {
+			throw new IllegalArgumentException("issuer");
+		}
+		if(account == null || account.isEmpty()) {
+			throw new IllegalArgumentException("account");
+		}
+		if(secret == null || secret.isEmpty()) {
+			throw new IllegalArgumentException("secret");
+		}
+		
+		this.issuer = issuer;
+		this.account = account;
+		this.secret = secret;
+		this.algo = algo;
+		this.digits = digits;
+		this.period = period;
 	}
 	
-	public static String path(String issuer, String account, String secret) {
-		return path(issuer, account, secret, null, null, null);
-	}
-	
-	public static String path(String issuer, String account, String secret, 
+	public OTPAuth(String issuer, String account, byte[] secret, 
 			String algo, Integer digits, Integer period) {
-		//TODO check inputs
+		this(issuer, account, new Base32().encodeAsString(secret), algo, digits, period);
+	}
+	
+	public String setupPath() {
 	    //https://github.com/google/google-authenticator/wiki/Key-Uri-Format
-		String type = "totp";
-		String path = "otpauth://" + type + "/" + issuer + ":" + account 
-				+ "?secret=" + secret + "&issuer=" + issuer;
-		if(algo != null && !algo.isEmpty()) {//default: SHA1
-			path += "&algorithm=" + algo;
+		String path = "otpauth://" + this.type + "/" + this.issuer + ":" + this.account 
+				+ "?secret=" + this.secret + "&issuer=" + this.issuer;
+		if(this.algo != null && !this.algo.isEmpty()) {//default: SHA1
+			path += "&algorithm=" + this.algo;
 		}
-		if(digits != null) {//default: 6
-			path += "&digits=" + digits;
+		if(this.digits != null) {//default: 6
+			path += "&digits=" + this.digits;
 		}
-		if(period != null) {//default: 30
-			path += "&period=" + period;
+		if(this.period != null) {//default: 30
+			path += "&period=" + this.period;
 		}
 	    return path;
-		
 	}
-
+	
+	public String generate() {
+		long unixTime = System.currentTimeMillis()/(1000L * this.period);
+		//System.out.println(unixTime);
+		String step = "0000000000000000" + Long.toHexString(unixTime).toUpperCase();
+		step = step.substring(step.length() -16);
+		String digits = "6";
+		if(this.digits != null) {
+			digits = this.digits.toString();
+		}
+		return TimebasedOneTimePassword.generate(this.secret, step, digits);
+	}
 }
