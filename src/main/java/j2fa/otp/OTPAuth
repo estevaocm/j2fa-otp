@@ -1,5 +1,8 @@
 package j2fa.otp;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.codec.binary.Base32;
 
 public class OTPAuth {
@@ -13,35 +16,41 @@ public class OTPAuth {
 	private Integer digits;
 	private Integer period;
 	
-	public OTPAuth(String issuer, String account, String secret, 
+	public OTPAuth(String secretHex, String issuer, String account,  
 			String algo, Integer digits, Integer period) {
-		if(issuer == null || issuer.isEmpty()) {
-			throw new IllegalArgumentException("issuer");
+		if(secretHex == null || secretHex.isEmpty()) {
+			throw new IllegalArgumentException("secretHex");
 		}
-		if(account == null || account.isEmpty()) {
-			throw new IllegalArgumentException("account");
-		}
-		if(secret == null || secret.isEmpty()) {
-			throw new IllegalArgumentException("secret");
-		}
-		
-		this.issuer = issuer;
-		this.account = account;
-		this.secretHex = secret;
+		this.secretHex = secretHex;
 		this.algo = algo;
 		this.digits = digits;
 		this.period = period;
-		this.secretBase32 = new Base32().encodeAsString(DataUtils.hexToBytes(secret));
+		this.secretBase32 = new Base32().encodeAsString(DataUtils.hexToBytes(secretHex));
+		this.issuer = issuer;
+		this.account = account;
 	}
 	
-	public OTPAuth(String issuer, String account, byte[] secret, 
+	public OTPAuth(byte[] secret, String issuer, String account, 
 			String algo, Integer digits, Integer period) {
 		this(issuer, account, DataUtils.bytesToHex(secret), algo, digits, period);
 	}
 	
+	/**
+	 * 
+	 * @return OTPAuth path for setting up the client. Usually presented as a QR code.
+	 * @see https://github.com/google/google-authenticator/wiki/Key-Uri-Format
+	 */
 	public String setupPath() {
-		//secret must be base32
-	    //https://github.com/google/google-authenticator/wiki/Key-Uri-Format
+		List<String> errors = new ArrayList<String>();
+		if(this.issuer == null || this.issuer.isEmpty()) {
+			errors.add(this.issuer);
+		}
+		if(this.account == null || this.account.isEmpty()) {
+			errors.add(this.account);
+		}
+		if(!errors.isEmpty()) {
+			throw new IllegalStateException("Data missing: " + errors);
+		}
 		String path = "otpauth://" + this.type + "/" + this.issuer + ":" + this.account 
 				+ "?secret=" + this.secretBase32 + "&issuer=" + this.issuer;
 		if(this.algo != null && !this.algo.isEmpty()) {//default: SHA1
@@ -56,10 +65,28 @@ public class OTPAuth {
 	    return path;
 	}
 	
+	public String setupPath(String issuer, String account) {
+		this.issuer = issuer;
+		this.account = account;
+		return setupPath();
+	}
+	
+	/**
+	 * 
+	 * @return The TOTP code for the current Unix time.
+	 */
 	public String generate() {
-		long unixTime = System.currentTimeMillis()/(1000L * this.period);
-		//System.out.println(unixTime);
-		String step = "0000000000000000" + Long.toHexString(unixTime).toUpperCase();
+		return generate(System.currentTimeMillis()/1000L);
+	}
+
+	/**
+	 * 
+	 * @param unixTime
+	 * @return The TOTP code for the given Unix time.
+	 */
+	public String generate(long unixTime) {
+		long time = unixTime/this.period;
+		String step = "0000000000000000" + Long.toHexString(time).toUpperCase();
 		step = step.substring(step.length() -16);
 		String digits = "6";
 		if(this.digits != null) {
