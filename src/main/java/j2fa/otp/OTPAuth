@@ -1,0 +1,43 @@
+package j2fa.otp;
+
+import org.apache.commons.codec.binary.Base32;
+
+public final class OTPAuth {
+	
+	private OTPAuth() {}
+	
+	public static String path(String issuer, String account, byte[] secret) {
+		return path(issuer, account, secret, null, null, null);
+	}
+	
+	public static String path(String issuer, String account, byte[] secret, 
+			String algo, Integer digits, Integer period) {
+	    Base32 base32 = new Base32();
+		return path(issuer, account, base32.encodeAsString(secret), algo, digits, period);
+	}
+	
+	public static String path(String issuer, String account, String secret) {
+		return path(issuer, account, secret, null, null, null);
+	}
+	
+	public static String path(String issuer, String account, String secret, 
+			String algo, Integer digits, Integer period) {
+		//TODO check inputs
+	    //https://github.com/google/google-authenticator/wiki/Key-Uri-Format
+		String type = "totp";
+		String path = "otpauth://" + type + "/" + issuer + ":" + account 
+				+ "?secret=" + secret + "&issuer=" + issuer;
+		if(algo != null && !algo.isEmpty()) {//default: SHA1
+			path += "&algorithm=" + algo;
+		}
+		if(digits != null) {//default: 6
+			path += "&digits=" + digits;
+		}
+		if(period != null) {//default: 30
+			path += "&period=" + period;
+		}
+	    return path;
+		
+	}
+
+}
