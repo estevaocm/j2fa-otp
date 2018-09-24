@@ -25,14 +25,14 @@ public class OTPAuth {
 		this.algo = algo;
 		this.digits = digits;
 		this.period = period;
-		this.secretBase32 = new Base32().encodeAsString(DataUtils.hexToBytes(secretHex));
+		this.secretBase32 = new Base32().encodeAsString(HexUtils.hexToBytes(secretHex));
 		this.issuer = issuer;
 		this.account = account;
 	}
 	
 	public OTPAuth(byte[] secret, String issuer, String account, 
 			String algo, Integer digits, Integer period) {
-		this(issuer, account, DataUtils.bytesToHex(secret), algo, digits, period);
+		this(issuer, account, HexUtils.bytesToHex(secret), algo, digits, period);
 	}
 	
 	/**

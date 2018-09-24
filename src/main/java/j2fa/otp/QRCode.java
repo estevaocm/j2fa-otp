@@ -17,9 +17,6 @@ public final class QRCode {
             throws WriterException, IOException {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, width, height);
-
-        //Path path = FileSystems.getDefault().getPath(filePath);
-        //MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);
         MatrixToImageWriter.writeToStream(bitMatrix, "PNG", out);
     }
 }

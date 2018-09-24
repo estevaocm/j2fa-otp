@@ -11,9 +11,9 @@ import java.util.TimeZone;
 import org.apache.commons.codec.binary.Base32;
 import org.apache.commons.codec.binary.Base64;
 
-public final class TimebasedOneTimePasswordTest {
+public final class OTPAuthTest {
 	
-	private TimebasedOneTimePasswordTest() {}
+	private OTPAuthTest() {}
 
 	public static void main(String[] args) throws Exception{
 		//demo();
@@ -102,7 +102,7 @@ public final class TimebasedOneTimePasswordTest {
 	    System.out.println("Byte array: " + Arrays.toString(randomSeed));
 	    //[-118, -42, 45, 64, 95, 69, -29, -68, 56, 120, 119, -34, -7, -11, 31, 4, -58, 11, -20, 110]
 
-	    String hex = DataUtils.bytesToHex(randomSeed);
+	    String hex = HexUtils.bytesToHex(randomSeed);
 	    System.out.println("Hexadecimal: " + hex);
 	    //8AD62D405F45E3BC387877DEF9F51F04C60BEC6E (40)
 	    

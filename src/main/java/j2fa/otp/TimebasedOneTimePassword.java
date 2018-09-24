@@ -43,8 +43,8 @@ public final class TimebasedOneTimePassword {
 		time = time.substring(time.length() -16);
 
 		// Get the HEX in a Byte[]
-		byte[] msg = DataUtils.hexToBytes(time);
-		byte[] k = DataUtils.hexToBytes(key);
+		byte[] msg = HexUtils.hexToBytes(time);
+		byte[] k = HexUtils.hexToBytes(key);
 		byte[] hash = CryptoUtils.hmacSha(crypto, k, msg);
 
 		// put selected bytes into result int

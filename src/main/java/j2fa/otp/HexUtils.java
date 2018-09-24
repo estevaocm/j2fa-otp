@@ -3,13 +3,11 @@ package j2fa.otp;
 import java.math.BigInteger;
 import java.util.Arrays;
 
-import org.apache.commons.codec.binary.Base32;
-
-public final class DataUtils {
+public final class HexUtils {
 	
 	private static final char[] HEX_CHARS = "0123456789ABCDEF".toCharArray();
 	
-	private DataUtils() {}
+	private HexUtils() {}
 	
 	public static String bytesToHex(byte[] bytes) {
 	    char[] hexChars = new char[bytes.length * 2];
