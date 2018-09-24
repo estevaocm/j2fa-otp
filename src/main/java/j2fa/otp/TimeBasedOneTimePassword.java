@@ -18,12 +18,8 @@ package j2fa.otp;
  * @see https://tools.ietf.org/html/rfc6238
  */
 
-public final class TimeBasedOneTimePassword {
+public final class TimeBasedOneTimePassword extends AbstractOneTimePassword {
 
-	private static final int[] DIGITS_POWER
-		// 0 1  2   3    4     5      6       7        8
-		= {1,10,100,1000,10000,100000,1000000,10000000,100000000 };
-	
 	private TimeBasedOneTimePassword() {}
 
 	/**
@@ -49,23 +45,12 @@ public final class TimeBasedOneTimePassword {
 		byte[] hash = CryptoUtils.hmacSha(crypto, k, msg);
 
 		// put selected bytes into result int
-		int offset = hash[hash.length - 1] & 0xf;
-
-		int binary =
-				((hash[offset] & 0x7f) << 24)
-				| ((hash[offset + 1] & 0xff) << 16)
-				| ((hash[offset + 2] & 0xff) << 8)
-				| (hash[offset + 3] & 0xff);
+		int offset = offset(hash);
 
 		int codeDigits = Integer.decode(returnDigits);
-		int otp = binary % DIGITS_POWER[codeDigits];
-
-		String result = Integer.toString(otp);
-		StringBuilder zeros = new StringBuilder();
-		while (zeros.length() + result.length() < codeDigits) {
-			zeros.append('0');
-		}
-		return zeros.toString() + result;
+		int otp = otp(hash, offset, codeDigits);
+		
+		return formatResult(otp, codeDigits);
 	}
 
 	/**
