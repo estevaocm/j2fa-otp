@@ -7,7 +7,7 @@ import org.apache.commons.codec.binary.Base32;
 
 public class OTPAuth {
 	
-	private String type = "totp";
+	private String type = "totp";//TODO hotp
 	private String issuer;
 	private String account;
 	private String secretHex; 
@@ -15,7 +15,17 @@ public class OTPAuth {
 	private String algo;
 	private Integer digits;
 	private Integer period;
+	private Integer counter;//REQUIRED if type is hotp: The counter parameter is required when provisioning a key for use with HOTP. It will set the initial counter value.
 	
+	/**
+	 * 
+	 * @param secretHex Secret key in hexadecimal format.
+	 * @param issuer Issuer of the code and account.
+	 * @param account User account. Typically the user's e-mail address.
+	 * @param algo OTP hash algorithm: SHA1 (default), SHA256, or SHA512.  
+	 * @param digits Number of digits in the code. Recommended: 6 or 8.
+	 * @param period TOTP code validity period in seconds. Recommended: 30 seconds.
+	 */
 	public OTPAuth(String secretHex, String issuer, String account,  
 			String algo, Integer digits, Integer period) {
 		if(secretHex == null || secretHex.isEmpty()) {
@@ -30,6 +40,15 @@ public class OTPAuth {
 		this.account = account;
 	}
 	
+	/**
+	 * 
+	 * @param secretHex Secret key in hexadecimal format.
+	 * @param issuer Issuer of the code and account.
+	 * @param account User account. Typically the user's e-mail address.
+	 * @param algo OTP hash algorithm: SHA1 (default), SHA256, or SHA512.  
+	 * @param digits Number of digits in the code. Recommended: 6 or 8.
+	 * @param period TOTP code validity period in seconds. Recommended: 30 seconds.
+	 */
 	public OTPAuth(byte[] secret, String issuer, String account, 
 			String algo, Integer digits, Integer period) {
 		this(issuer, account, HexUtils.bytesToHex(secret), algo, digits, period);
@@ -41,6 +60,7 @@ public class OTPAuth {
 	 * @see https://github.com/google/google-authenticator/wiki/Key-Uri-Format
 	 */
 	public String setupPath() {
+		//TODO URL encode
 		List<String> errors = new ArrayList<String>();
 		if(this.issuer == null || this.issuer.isEmpty()) {
 			errors.add(this.issuer);
@@ -92,6 +112,6 @@ public class OTPAuth {
 		if(this.digits != null) {
 			digits = this.digits.toString();
 		}
-		return TimebasedOneTimePassword.generate(this.secretHex, step, digits);
+		return TimeBasedOneTimePassword.generate(this.secretHex, step, digits);
 	}
 }

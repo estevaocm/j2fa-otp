@@ -39,9 +39,9 @@ import java.security.NoSuchAlgorithmException;
  * One-Time Password (OTP) using JCE to provide the HMAC-SHA-1.
  *
  * @author Loren Hart
- * @version 1.0
+ * @see https://tools.ietf.org/html/rfc4226
  */
-public final class OneTimePassword {
+public final class HMACBasedOneTimePassword {
 	
 	private static final int[] DIGITS_POWER
 		// 0 1  2   3    4     5      6       7        8
@@ -51,7 +51,7 @@ public final class OneTimePassword {
 	//                                0  1  2  3  4  5  6  7  8  9
 	private static final int[] DOUBLE_DIGITS = { 0, 2, 4, 6, 8, 1, 3, 5, 7, 9 };
 
-	private OneTimePassword() {}
+	private HMACBasedOneTimePassword() {}
 
 	/**
 	 * Calculates the checksum using the credit card algorithm. This algorithm has the advantage 
