@@ -1,25 +1,8 @@
 package j2fa.otp;
-/**
- Copyright (c) 2011 IETF Trust and the persons identified as
- authors of the code. All rights reserved.
-
- Redistribution and use in source and binary forms, with or without
- modification, is permitted pursuant to, and subject to the license
- terms contained in, the Simplified BSD License set forth in Section
- 4.c of the IETF Trust's Legal Provisions Relating to IETF Documents
- (http://trustee.ietf.org/license-info).
- */
-
-import java.math.BigInteger;
 
 /**
- * This is an example implementation of the OATH TOTP algorithm.
- * Visit www.openauthentication.org for more information.
- *
- * @author Johan Rydell, PortWise, Inc.
  * @see https://tools.ietf.org/html/rfc6238
  */
-
 public final class TimeBasedOneTimePassword extends AbstractOneTimePassword {
 
 	private TimeBasedOneTimePassword() {}
@@ -42,10 +25,28 @@ public final class TimeBasedOneTimePassword extends AbstractOneTimePassword {
 		return formatResult(otp, returnDigits);
 	}
 
+	/**
+	 * This method generates a TOTP value for the given set of parameters.
+	 *
+	 * @param key: the shared secret
+	 * @param time: a value that reflects a time
+	 * @param returnDigits: number of digits to return
+	 * @param algo: the crypto function to use
+	 *
+	 * @return: a numeric String in base 10 that includes {@link DIGITS_POWER} digits
+	 */
 	public static String generate(byte[] key, long time, int returnDigits, HMACAlgorithm algo){
 		return generate(key, ByteUtils.longToBytes(time), returnDigits, algo);
 	}
 	
+	/**
+	 * This method generates a TOTP value for the given set of parameters.
+	 *
+	 * @param key: the shared secret
+	 * @param time: a value that reflects a time
+	 *
+	 * @return: a numeric String in base 10 that includes {@link DIGITS_POWER} digits
+	 */
 	public static String generate(byte[] key, byte[] time){
 		return generate(key, time, 6, HMACAlgorithm.SHA1);
 	}

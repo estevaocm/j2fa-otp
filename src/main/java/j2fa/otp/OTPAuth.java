@@ -112,7 +112,7 @@ public class OTPAuth {
 		if(this.digits != null) {
 			digits = this.digits.toString();
 		}
-		return TimeBasedOneTimePassword.generate(this.secretHex, step, digits, HMACAlgorithm.SHA1);
-		//return TimeBasedOneTimePassword.generate(ByteUtils.hexToBytes(this.secretHex), unixTime, 6, HMACAlgorithm.SHA1);
+		//return TimeBasedOneTimePassword.generate(this.secretHex, step, digits, HMACAlgorithm.SHA1);
+		return TimeBasedOneTimePassword.generate(ByteUtils.hexToBytes(this.secretHex), time, 6, HMACAlgorithm.SHA1);
 	}
 }
