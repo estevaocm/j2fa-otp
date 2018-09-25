@@ -12,7 +12,7 @@ public enum HMACAlgorithm {
 	}
 	
 	public String desc() {
-		return this.desc();
+		return this.desc;
 	}
 
 }

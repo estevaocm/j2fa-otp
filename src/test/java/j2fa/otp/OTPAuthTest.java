@@ -21,7 +21,7 @@ public final class OTPAuthTest {
 		secret = generate();
 		
 		secret = "97AB9B4248BFE25C51BA2EB805BEC41774A8CB3F";
-		qrcode(secret);
+		//qrcode(secret);
 		
 		verify(secret);
 		//TODO Consider previous TOTP code as valid and synchronize with offset as recommended in the RFC.

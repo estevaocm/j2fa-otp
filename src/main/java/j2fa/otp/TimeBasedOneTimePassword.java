@@ -40,6 +40,10 @@ public final class TimeBasedOneTimePassword extends AbstractOneTimePassword {
 		return formatResult(otp, returnDigits);
 	}
 
+	public static String generate(byte[] key, byte[] time){
+		return generate(key, time, 6, HMACAlgorithm.SHA1);
+	}
+	
 	/**
 	 * This method generates a TOTP value for the given set of parameters.
 	 *
