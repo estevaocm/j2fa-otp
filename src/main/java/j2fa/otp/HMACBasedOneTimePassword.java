@@ -34,7 +34,7 @@ public final class HMACBasedOneTimePassword extends AbstractOneTimePassword {
 	 * plus the optional checksum digit if requested.
 	 */
 	public static String generate(byte[] secret, long movingFactor, int codeDigits,
-			boolean addChecksum, int truncationOffset) throws NoSuchAlgorithmException, InvalidKeyException{
+			boolean addChecksum, int truncationOffset){
 		
 		// put movingFactor value into text byte array
 		byte[] text = new byte[8];

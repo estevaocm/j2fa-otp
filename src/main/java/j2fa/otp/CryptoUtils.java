@@ -56,7 +56,7 @@ public final class CryptoUtils {
 	 */
 	public static byte[] hmacSha1(byte[] keyBytes, byte[] text){
 		try {
-			return hmacSha("HmacSHA1", keyBytes, text);
+			return hmacSha(HMACAlgorithm.SHA1.desc(), keyBytes, text);
 		} catch (UndeclaredThrowableException nsae) {
 			return hmacSha("HMAC-SHA-1", keyBytes, text);
 		}
