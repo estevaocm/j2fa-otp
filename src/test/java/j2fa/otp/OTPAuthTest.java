@@ -102,7 +102,7 @@ public final class OTPAuthTest {
 	    System.out.println("Byte array: " + Arrays.toString(randomSeed));
 	    //[-118, -42, 45, 64, 95, 69, -29, -68, 56, 120, 119, -34, -7, -11, 31, 4, -58, 11, -20, 110]
 
-	    String hex = HexUtils.bytesToHex(randomSeed);
+	    String hex = ByteUtils.bytesToHex(randomSeed);
 	    System.out.println("Hexadecimal: " + hex);
 	    //8AD62D405F45E3BC387877DEF9F51F04C60BEC6E (40)
 	    

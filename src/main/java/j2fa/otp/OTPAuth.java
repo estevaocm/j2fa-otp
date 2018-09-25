@@ -35,7 +35,7 @@ public class OTPAuth {
 		this.algo = algo;
 		this.digits = digits;
 		this.period = period;
-		this.secretBase32 = new Base32().encodeAsString(HexUtils.hexToBytes(secretHex));
+		this.secretBase32 = new Base32().encodeAsString(ByteUtils.hexToBytes(secretHex));
 		this.issuer = issuer;
 		this.account = account;
 	}
@@ -51,7 +51,7 @@ public class OTPAuth {
 	 */
 	public OTPAuth(byte[] secret, String issuer, String account, 
 			String algo, Integer digits, Integer period) {
-		this(issuer, account, HexUtils.bytesToHex(secret), algo, digits, period);
+		this(issuer, account, ByteUtils.bytesToHex(secret), algo, digits, period);
 	}
 	
 	/**
@@ -113,5 +113,6 @@ public class OTPAuth {
 			digits = this.digits.toString();
 		}
 		return TimeBasedOneTimePassword.generate(this.secretHex, step, digits, HMACAlgorithm.SHA1);
+		//return TimeBasedOneTimePassword.generate(ByteUtils.hexToBytes(this.secretHex), unixTime, 6, HMACAlgorithm.SHA1);
 	}
 }

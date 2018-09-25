@@ -10,6 +10,8 @@ package j2fa.otp;
  (http://trustee.ietf.org/license-info).
  */
 
+import java.math.BigInteger;
+
 /**
  * This is an example implementation of the OATH TOTP algorithm.
  * Visit www.openauthentication.org for more information.
@@ -40,6 +42,10 @@ public final class TimeBasedOneTimePassword extends AbstractOneTimePassword {
 		return formatResult(otp, returnDigits);
 	}
 
+	public static String generate(byte[] key, long time, int returnDigits, HMACAlgorithm algo){
+		return generate(key, ByteUtils.longToBytes(time), returnDigits, algo);
+	}
+	
 	public static String generate(byte[] key, byte[] time){
 		return generate(key, time, 6, HMACAlgorithm.SHA1);
 	}
@@ -55,7 +61,7 @@ public final class TimeBasedOneTimePassword extends AbstractOneTimePassword {
 	 * @return: a numeric String in base 10 that includes {@link DIGITS_POWER} digits
 	 */
 	public static String generate(String key, String time, String returnDigits, HMACAlgorithm algo){
-		return generate(HexUtils.hexToBytes(key), hex16toBytes(time), Integer.decode(returnDigits), algo);
+		return generate(ByteUtils.hexToBytes(key), hex16toBytes(time), Integer.decode(returnDigits), algo);
 	}
 	
 	private static byte[] hex16toBytes(String hex) {
@@ -65,7 +71,7 @@ public final class TimeBasedOneTimePassword extends AbstractOneTimePassword {
 		hex = "00000000000000000000" + hex;
 		hex = hex.substring(hex.length() -16);
 		// Get the HEX in a Byte[]
-		return HexUtils.hexToBytes(hex);
+		return ByteUtils.hexToBytes(hex);
 	}
 
 }

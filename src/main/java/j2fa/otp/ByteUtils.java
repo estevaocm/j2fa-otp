@@ -3,11 +3,11 @@ package j2fa.otp;
 import java.math.BigInteger;
 import java.util.Arrays;
 
-public final class HexUtils {
+public final class ByteUtils {
 	
 	private static final char[] HEX_CHARS = "0123456789ABCDEF".toCharArray();
 	
-	private HexUtils() {}
+	private ByteUtils() {}
 	
 	public static String bytesToHex(byte[] bytes) {
 	    char[] hexChars = new char[bytes.length * 2];
@@ -26,5 +26,14 @@ public final class HexUtils {
 		// Copy all the REAL bytes, not the "first"
 		return Arrays.copyOfRange(bArray, 1, bArray.length);
 	}
+	
+	public static byte[] longToBytes(long l) {
+	    byte[] result = new byte[Long.BYTES];
+	    for (int i = 7; i >= 0; i--) {
+	        result[i] = (byte)(l & 0xFF);
+	        l >>= 8;
+	    }
+	    return result;
+	}	
 	
 }
