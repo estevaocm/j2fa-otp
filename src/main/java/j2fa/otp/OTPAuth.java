@@ -98,4 +98,18 @@ public class OTPAuth {
 		}
 		return TimeBasedOneTimePassword.generate(this.secret, time, digits, HMACAlgorithm.SHA1);
 	}
+
+	/**
+	 * Generates the TOTP code for the given Unix time adjusted by the given number of steps of the period
+	 * parameter. This may be necessary to account for network latency or clock synchronization. 
+	 * The RFC recommends the steps to be no larger than 1.0 and no smaller than -1.0, in the case of latency.
+	 * For synchronization, the adjustment could be larger but should be recorded and fixed.
+	 * @param unixTime
+	 * @param step 
+	 * @return 
+	 * @see Sections 5.2 and 6 of https://tools.ietf.org/html/rfc6238
+	 */
+	public String generate(long unixTime, double step) {
+		return generate(unixTime + (int)(step * this.period));
+	}
 }
