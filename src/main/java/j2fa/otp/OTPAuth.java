@@ -112,6 +112,6 @@ public class OTPAuth {
 		if(this.digits != null) {
 			digits = this.digits.toString();
 		}
-		return TimeBasedOneTimePassword.generate(this.secretHex, step, digits);
+		return TimeBasedOneTimePassword.generate(this.secretHex, step, digits, HMACAlgorithm.SHA1);
 	}
 }
