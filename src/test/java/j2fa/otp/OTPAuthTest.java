@@ -118,7 +118,7 @@ public final class OTPAuthTest {
 	}
 	
 	private static String qrcode(String hex) throws Exception{
-	    String path = mockOTPAuth(hex).setupPath(); 
+	    String path = mockOTPAuth(ByteUtils.hexToBytes(hex)).setupPath(); 
 	    System.out.println(path);
 	    
 		QRCode.generateQRCodeImage(path, 150, 150, new FileOutputStream(new File("qrcode.png")));
@@ -126,13 +126,8 @@ public final class OTPAuthTest {
 		return hex;
 	}
 	
-	private static OTPAuth mockOTPAuth(String secret) {
-		OTPAuth o = new OTPAuth(secret, "Serpro", "estevaocm@serpro.gov.br", "SHA1", 6, 30);
-		return o;
-	}
-	
 	private static OTPAuth mockOTPAuth(byte[] secret) {
-		OTPAuth o = new OTPAuth(secret, "Serpro", "estevaocm@serpro.gov.br", "SHA1", 6, 30);
+		OTPAuth o = new OTPAuth(secret, "Serpro", "estevaocm@serpro.gov.br", HMACAlgorithm.SHA1, 6, 30);
 		return o;
 	}
 	
@@ -140,7 +135,7 @@ public final class OTPAuthTest {
 		if(secret == null || secret.isEmpty()) {
 			secret = "97AB9B4248BFE25C51BA2EB805BEC41774A8CB3F";
 		}
-		OTPAuth o = mockOTPAuth(secret);
+		OTPAuth o = mockOTPAuth(ByteUtils.hexToBytes(secret));
 		System.out.println("TOTP code: " + o.generate());
 	}
 	
