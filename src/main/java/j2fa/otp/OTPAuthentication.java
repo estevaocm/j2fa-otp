@@ -134,7 +134,7 @@ public class OTPAuthentication {
 	    return path;
 	}
 	
-	public String setupPath(String issuer, String account) {
+	public String setupPath(String issuer, String account) throws UnsupportedEncodingException {
 		checkStringParam(issuer);
 		this.issuer = issuer;
 		checkStringParam(account);
