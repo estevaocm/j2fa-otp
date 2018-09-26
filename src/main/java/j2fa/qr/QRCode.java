@@ -1,4 +1,4 @@
-package j2fa.otp;
+package j2fa.qr;
 
 import java.io.IOException;
 import java.io.OutputStream;

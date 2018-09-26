@@ -1,4 +1,4 @@
-package j2fa.otp;
+package j2fa.utils;
 
 import java.lang.reflect.UndeclaredThrowableException;
 import java.security.GeneralSecurityException;
@@ -8,6 +8,8 @@ import java.security.SecureRandom;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+
+import j2fa.otp.HMACAlgorithm;
 
 public final class CryptoUtils {
 

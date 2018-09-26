@@ -1,5 +1,8 @@
 package j2fa.otp;
 
+import j2fa.utils.ByteUtils;
+import j2fa.utils.CryptoUtils;
+
 /**
  * HMAC-based one-time password (HOTP) generator.
  * If the time is used as the moving factor, the result is a TOTP code.

@@ -11,6 +11,10 @@ import java.util.TimeZone;
 import org.apache.commons.codec.binary.Base32;
 import org.apache.commons.codec.binary.Base64;
 
+import j2fa.qr.QRCode;
+import j2fa.utils.ByteUtils;
+import j2fa.utils.CryptoUtils;
+
 public final class OTPAuthTest {
 	
 	private OTPAuthTest() {}

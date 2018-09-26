@@ -1,4 +1,4 @@
-package j2fa.otp;
+package j2fa.utils;
 
 import java.math.BigInteger;
 import java.util.Arrays;
