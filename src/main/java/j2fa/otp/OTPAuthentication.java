@@ -10,9 +10,9 @@ import org.apache.commons.codec.binary.Base32;
  * @author Steven Monteiro
  *
  */
-public class OTPAuth {
+public class OTPAuthentication {
 	
-	private String type = "totp";//TODO hotp
+	private String type;
 	private String issuer;
 	private String account;
 	private byte[] secret; 
@@ -20,29 +20,82 @@ public class OTPAuth {
 	private HMACAlgorithmEnum algo;
 	private Integer digits;
 	private Integer period;
-	private Integer counter;//REQUIRED if type is hotp: The counter parameter is required when provisioning a key for use with HOTP. It will set the initial counter value.
+	private Long counter; 
 	
 	/**
 	 * 
-	 * @param secretHex Secret key.
+	 * @param secret Secret key.
 	 * @param issuer Issuer of the code and account.
 	 * @param account User account. Typically the user's e-mail address.
 	 * @param algo OTP hash algorithm: SHA1 (default), SHA256, or SHA512.  
 	 * @param digits Number of digits in the code. Recommended: 6 or 8.
-	 * @param period TOTP code validity period in seconds. Recommended: 30 seconds.
+	 * @param period TOTP code validity period in seconds. Recommended: 30 seconds. 
+	 * 		Required when provisioning a key for use with THOTP. Must be null for HOTP.
+	 * @param counter Initial HOTP counter value. Required when provisioning a key for use with HOTP.
+	 * 		Must be null fo TOTP.
 	 */
-	public OTPAuth(byte[] secret, String issuer, String account,  
-			HMACAlgorithmEnum algo, Integer digits, Integer period) {
+	public OTPAuthentication(byte[] secret, String issuer, String account,  
+			HMACAlgorithmEnum algo, Integer digits, Integer period, Long counter) {
 		if(secret == null || secret.length == 0) {
 			throw new IllegalArgumentException("secret");
 		}
 		this.secret = secret;
-		this.algo = algo;
-		this.digits = digits;
-		this.period = period;
 		this.secretBase32 = new Base32().encodeAsString(secret);
+		this.algo = algo;
+		if(algo == null) {
+			this.algo = HMACAlgorithmEnum.SHA1;
+		}
+		this.digits = digits;
+		if(digits == null) {
+			this.digits = 6;
+		}
+		
+		if(period != null && counter != null) {
+			throw new IllegalArgumentException("Either period or counter must be null (HOTP vs. TOTP).");
+		}
+		if(period == null && counter == null) {
+			throw new IllegalArgumentException("Either period or counter must not be null (HOTP vs. TOTP).");
+		}
+		this.period = period;
+		this.counter = counter;
+		if(this.period == null) {
+			this.type = "hotp";
+		}
+		else {
+			this.type = "totp";
+		}
+		
 		this.issuer = issuer;
 		this.account = account;
+	}
+	
+	/**
+	 * @param secret Secret key.
+	 * @param issuer Issuer of the code and account.
+	 * @param account User account. Typically the user's e-mail address.
+	 * @param algo OTP hash algorithm: SHA1 (default), SHA256, or SHA512.  
+	 * @param digits Number of digits in the code. Recommended: 6 or 8.
+	 * @param period TOTP code validity period in seconds. Recommended: 30 seconds. 
+	 * 		Required when provisioning a key for use with THOTP. Must be null for HOTP.
+	 */
+	public OTPAuthentication(byte[] secret, String issuer, String account,  
+			HMACAlgorithmEnum algo, Integer digits, Integer period) {
+		this(secret, issuer, account, algo, digits, period, null);
+	}
+	
+	/**
+	 * Constructor for HOTP.
+	 * @param secret Secret key.
+	 * @param issuer Issuer of the code and account.
+	 * @param account User account. Typically the user's e-mail address.
+	 * @param algo OTP hash algorithm: SHA1 (default), SHA256, or SHA512.  
+	 * @param digits Number of digits in the code. Recommended: 6 or 8.
+	 * @param counter Initial HOTP counter value. Required when provisioning a key for use with HOTP.
+	 * 		Must be null fo TOTP.
+	 */
+	public OTPAuthentication(byte[] secret, String issuer, String account,  
+			HMACAlgorithmEnum algo, Integer digits, Long counter) {
+		this(secret, issuer, account, algo, digits, null, counter);
 	}
 	
 	/**
@@ -84,10 +137,16 @@ public class OTPAuth {
 	
 	/**
 	 * 
-	 * @return The TOTP code for the current Unix time.
+	 * @return The OTP code for the current Unix time, if TOTP, or for the next counter, if HOTP.
 	 */
 	public String generate() {
-		return generate(System.currentTimeMillis());
+		if(this.counter == null) {
+			return generate(System.currentTimeMillis());
+		}
+		else {
+			this.counter++;
+			return generate(this.counter);
+		}
 	}
 
 	/**

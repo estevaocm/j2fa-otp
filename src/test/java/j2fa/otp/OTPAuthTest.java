@@ -135,8 +135,8 @@ public final class OTPAuthTest {
 		return hex;
 	}
 	
-	private static OTPAuth mockOTPAuth(byte[] secret) {
-		OTPAuth o = new OTPAuth(secret, "Serpro", "estevaocm@serpro.gov.br", HMACAlgorithmEnum.SHA1, 6, 30);
+	private static OTPAuthentication mockOTPAuth(byte[] secret) {
+		OTPAuthentication o = new OTPAuthentication(secret, "Serpro", "estevaocm@serpro.gov.br", HMACAlgorithmEnum.SHA1, 6, 30);
 		return o;
 	}
 	
@@ -144,7 +144,7 @@ public final class OTPAuthTest {
 		if(secret == null || secret.isEmpty()) {
 			secret = "97AB9B4248BFE25C51BA2EB805BEC41774A8CB3F";
 		}
-		OTPAuth o = mockOTPAuth(ByteUtils.hexToBytes(secret));
+		OTPAuthentication o = mockOTPAuth(ByteUtils.hexToBytes(secret));
 		System.out.println("TOTP code: " + o.generate());
 	}
 	
