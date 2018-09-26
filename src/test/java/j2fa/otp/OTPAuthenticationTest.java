@@ -20,9 +20,9 @@ import j2fa.utils.CryptoUtils;
  * @author Steven Monteiro
  *
  */
-public final class OTPAuthTest {
+public final class OTPAuthenticationTest {
 	
-	private OTPAuthTest() {}
+	private OTPAuthenticationTest() {}
 
 	public static void main(String[] args) throws Exception{
 		//demo();
@@ -108,19 +108,19 @@ public final class OTPAuthTest {
 	
 	private static String generate() throws Exception{
 		byte[] randomSeed = CryptoUtils.randomSeed(20);//160 bits key recommended by the HOTP RFC
-	    System.out.println("Byte array: " + Arrays.toString(randomSeed));
+	    System.out.println("Byte array: " + Arrays.toString(randomSeed) + " (" + randomSeed.length + ")");
 	    //[-118, -42, 45, 64, 95, 69, -29, -68, 56, 120, 119, -34, -7, -11, 31, 4, -58, 11, -20, 110]
 
 	    String hex = ByteUtils.bytesToHex(randomSeed);
-	    System.out.println("Hexadecimal: " + hex);
+	    System.out.println("Hexadecimal: " + hex + " (" + hex.length() + ")");
 	    //8AD62D405F45E3BC387877DEF9F51F04C60BEC6E (40)
 	    
 	    String base32 = new Base32().encodeAsString(randomSeed);
-	    System.out.println("Base32: " + base32);
+	    System.out.println("Base32: " + base32 + " (" + base32.length() + ")");
 	    //RLLC2QC7IXR3YODYO7PPT5I7ATDAX3DO (32)
 	    
 	    String base64 = new Base64().encodeAsString(randomSeed);
-	    System.out.println("Base64: " + base64);
+	    System.out.println("Base64: " + base64 + " (" + base64.length() + ")");
 	    //itYtQF9F47w4eHfe+fUfBMYL7G4= (28)
 	    
 	    return qrcode(hex);

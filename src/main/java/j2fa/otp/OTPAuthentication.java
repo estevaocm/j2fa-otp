@@ -131,6 +131,9 @@ public class OTPAuthentication {
 		if(this.period != null) {//default: 30
 			path += "&period=" + this.period;
 		}
+		if(this.counter != null) {
+			path += "&counter=" + this.counter;
+		}
 	    return path;
 	}
 	
