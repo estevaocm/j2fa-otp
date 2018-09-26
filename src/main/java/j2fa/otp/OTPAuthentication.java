@@ -1,5 +1,7 @@
 package j2fa.otp;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,17 +84,28 @@ public class OTPAuthentication {
 			this.type = "totp";
 		}
 		
+		checkStringParam(issuer);
 		this.issuer = issuer;
+		checkStringParam(account);
 		this.account = account;
+	}
+	
+	private void checkStringParam(String param) {
+		if(param == null) {
+			return;
+		}
+		if(param.contains(":")) {
+			throw new IllegalArgumentException("Character not allowed in text parameter: \":\"");
+		}
 	}
 	
 	/**
 	 * 
 	 * @return OTPAuth path for setting up the client. Usually presented as a QR code.
+	 * @throws UnsupportedEncodingException 
 	 * @see https://github.com/google/google-authenticator/wiki/Key-Uri-Format
 	 */
-	public String setupPath() {
-		//TODO URL encode
+	public String setupPath() throws UnsupportedEncodingException {
 		List<String> errors = new ArrayList<String>();
 		if(this.issuer == null || this.issuer.isEmpty()) {
 			errors.add(this.issuer);
@@ -103,8 +116,12 @@ public class OTPAuthentication {
 		if(!errors.isEmpty()) {
 			throw new IllegalStateException("Data missing: " + errors);
 		}
-		String path = "otpauth://" + this.type + "/" + this.issuer + ":" + this.account 
-				+ "?secret=" + this.secretBase32 + "&issuer=" + this.issuer;
+		String utf8 = "UTF-8";
+		String path = "otpauth://" + this.type + "/" 
+				+ URLEncoder.encode(this.issuer, utf8) + ":" 
+				+ URLEncoder.encode(this.account, utf8) 
+				+ "?secret=" + this.secretBase32 + "&issuer=" 
+				+ URLEncoder.encode(this.issuer, utf8);
 		if(this.algo != null) {//default: SHA1
 			path += "&algorithm=" + this.algo.desc();
 		}
@@ -118,7 +135,9 @@ public class OTPAuthentication {
 	}
 	
 	public String setupPath(String issuer, String account) {
+		checkStringParam(issuer);
 		this.issuer = issuer;
+		checkStringParam(account);
 		this.account = account;
 		return setupPath();
 	}
