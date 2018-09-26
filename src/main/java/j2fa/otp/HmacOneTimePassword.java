@@ -1,10 +1,14 @@
 package j2fa.otp;
 
 /**
+ * HMAC-based one-time password (HOTP) generator.
+ * If the time is used as the moving factor, the result is a TOTP code.
+ * 
+ * <p>Based on code by Loren Hart and Johan Rydell. 
  * @see https://tools.ietf.org/html/rfc4226
  * @see https://tools.ietf.org/html/rfc6238
  */
-public class OneTimePassword {
+public class HmacOneTimePassword {
 	
 	private static final int[] DIGITS_POWER =
 	  // 0 1  2   3    4     5      6       7        8
@@ -14,10 +18,10 @@ public class OneTimePassword {
 	private static final int[] DOUBLE_DIGITS = 
 		{ 0, 2, 4, 6, 8, 1, 3, 5, 7, 9 };
 	
-	private OneTimePassword() {}
+	private HmacOneTimePassword() {}
 
 	/**
-	 * This method generates a TOTP value for the given set of parameters.
+	 * This method generates a OTP value for the given set of parameters.
 	 *
 	 * @param key: the shared secret
 	 * @param movingFactor: the counter, time, or other value that changes on a per use basis.
@@ -35,7 +39,7 @@ public class OneTimePassword {
 	}
 
 	/**
-	 * This method generates a TOTP value for the given set of parameters.
+	 * This method generates a OTP value for the given set of parameters.
 	 *
 	 * @param key: the shared secret
 	 * @param movingFactor: the counter, time, or other value that changes on a per use basis.
@@ -49,7 +53,7 @@ public class OneTimePassword {
 	}
 	
 	/**
-	 * This method generates a TOTP value for the given set of parameters.
+	 * This method generates a OTP value for the given set of parameters.
 	 *
 	 * @param key: the shared secret
 	 * @param movingFactor: the counter, time, or other value that changes on a per use basis.
@@ -61,7 +65,7 @@ public class OneTimePassword {
 	}
 	
 	/**
-	 * This method generates a TOTP value for the given set of parameters.
+	 * This method generates a OTP value for the given set of parameters.
 	 *
 	 * @param key: the shared secret, HEX encoded
 	 * @param movingFactor: the counter, time, or other value that changes on a per use basis.

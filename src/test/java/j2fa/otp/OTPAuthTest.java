@@ -80,17 +80,17 @@ public final class OTPAuthTest {
 				String utcTime = df.format(new Date(testTime[i]*1000));
 				System.out.print("|  " + fmtTime + "  |  " + utcTime + "  | " + steps + " |");
 				long t = System.nanoTime();
-				String totp = OneTimePassword.generate(seed, steps, "8", HMACAlgorithm.SHA1);
+				String totp = HmacOneTimePassword.generate(seed, steps, "8", HMACAlgorithm.SHA1);
 				t = interval(t);
 				System.out.println(totp + "| SHA1   | " + t);
 				System.out.print("|  " + fmtTime + "  |  " + utcTime + "  | " + steps + " |");
 				t = System.nanoTime();
-				totp = OneTimePassword.generate(seed32, steps, "8", HMACAlgorithm.SHA256);
+				totp = HmacOneTimePassword.generate(seed32, steps, "8", HMACAlgorithm.SHA256);
 				t = interval(t);
 				System.out.println(totp + "| SHA256 | " + t);
 				System.out.print("|  " + fmtTime + "  |  " + utcTime + "  | " + steps + " |");
 				t = System.nanoTime();
-				totp = OneTimePassword.generate(seed64, steps, "8", HMACAlgorithm.SHA512);
+				totp = HmacOneTimePassword.generate(seed64, steps, "8", HMACAlgorithm.SHA512);
 				t = interval(t);
 				System.out.println(totp + "| SHA512 | " + t);
 
