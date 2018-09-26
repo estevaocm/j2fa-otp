@@ -25,14 +25,6 @@ public final class OTPAuthTest {
 		
 		verify(secret);
 		//TODO Consider previous TOTP code as valid and synchronize with offset as recommended in the RFC.
-		
-		long t = System.currentTimeMillis();
-		long i = System.currentTimeMillis();
-		System.out.println(Arrays.toString(formatMovingFactor(t)));
-		System.out.println(interval(i));
-		i = System.currentTimeMillis();
-		System.out.println(Arrays.toString(ByteUtils.longToBytes(t)));
-		System.out.println(interval(i));
 	}
 	
 	/*
@@ -145,16 +137,6 @@ public final class OTPAuthTest {
 		}
 		OTPAuth o = mockOTPAuth(ByteUtils.hexToBytes(secret));
 		System.out.println("TOTP code: " + o.generate());
-	}
-	
-	private static byte[] formatMovingFactor(long movingFactor) {
-		// put movingFactor value into text byte array
-		byte[] text = new byte[8];
-		for (int i = text.length - 1; i >= 0; i--) {
-			text[i] = (byte) (movingFactor & 0xff);
-			movingFactor >>= 8;
-		}
-		return text;
 	}
 	
 }
