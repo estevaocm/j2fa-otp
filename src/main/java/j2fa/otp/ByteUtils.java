@@ -29,7 +29,7 @@ public final class ByteUtils {
 	
 	public static byte[] longToBytes(long l) {
 	    byte[] result = new byte[Long.BYTES];
-	    for (int i = 7; i >= 0; i--) {
+	    for (int i = result.length -1; i >= 0; i--) {
 	        result[i] = (byte)(l & 0xFF);
 	        l >>= 8;
 	    }

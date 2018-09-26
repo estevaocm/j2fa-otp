@@ -107,18 +107,8 @@ public class OneTimePassword {
 	
 	public static String generateHOTP(byte[] secret, long movingFactor, int codeDigits,
 			boolean addChecksum, int truncationOffset, HMACAlgorithm algo){
-		return generate(secret, formatMovingFactor(movingFactor), codeDigits, 
+		return generate(secret, ByteUtils.longToBytes(movingFactor), codeDigits, 
 				addChecksum, truncationOffset, algo);
-	}
-	
-	private static byte[] formatMovingFactor(long movingFactor) {
-		// put movingFactor value into text byte array
-		byte[] text = new byte[8];
-		for (int i = text.length - 1; i >= 0; i--) {
-			text[i] = (byte) (movingFactor & 0xff);
-			movingFactor >>= 8;
-		}
-		return text;
 	}
 	
 	private static byte[] hex16toBytes(String hex) {
