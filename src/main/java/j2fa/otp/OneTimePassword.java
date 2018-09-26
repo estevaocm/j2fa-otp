@@ -2,16 +2,19 @@ package j2fa.otp;
 
 /**
  * @see https://tools.ietf.org/html/rfc4226
+ * @see https://tools.ietf.org/html/rfc6238
  */
 public class OneTimePassword {
 	
-	private static final int[] DIGITS_POWER
-		// 0 1  2   3    4     5      6       7        8
-		= {1,10,100,1000,10000,100000,1000000,10000000,100000000};
+	private static final int[] DIGITS_POWER =
+	  // 0 1  2   3    4     5      6       7        8
+		{1,10,100,1000,10000,100000,1000000,10000000,100000000};
 	// These are used to calculate the check-sum digits.
 	//    0  1  2  3  4  5  6  7  8  9
 	private static final int[] DOUBLE_DIGITS = 
 		{ 0, 2, 4, 6, 8, 1, 3, 5, 7, 9 };
+	
+	private OneTimePassword() {}
 
 	/**
 	 * This method generates a TOTP value for the given set of parameters.
@@ -105,7 +108,7 @@ public class OneTimePassword {
 		return formatResult(otp, digits);
 	}
 	
-	public static String generateHOTP(byte[] secret, long movingFactor, int codeDigits,
+	public static String generate(byte[] secret, long movingFactor, int codeDigits,
 			boolean addChecksum, int truncationOffset, HMACAlgorithm algo){
 		return generate(secret, ByteUtils.longToBytes(movingFactor), codeDigits, 
 				addChecksum, truncationOffset, algo);
