@@ -27,13 +27,15 @@ public final class OTPAuthenticationTest {
 	public static void main(String[] args) throws Exception{
 		//demo();
 		String secret = null;
-		secret = generate();
+		//secret = generate();
 		
-		secret = "97AB9B4248BFE25C51BA2EB805BEC41774A8CB3F";
-		//qrcode(secret);
+		//secret = "97AB9B4248BFE25C51BA2EB805BEC41774A8CB3F";//Estevao
+		secret = "F77DA3B3BFCC009908BA45BE718DC7D9F884A1B0";//Savio
+		qrcode(secret);
 		
 		verify(secret);
 		//TODO Consider previous TOTP code as valid and synchronize with offset as recommended in the RFC.
+		//otpauth://totp/Serpro:savio@serpro.gov.br?secret=ZH73XUGVBBTS4BHG2BAYNLGXSVGW7KI6&issuer=Serpro&algorithm=HmacSHA1&digits=6&period=30
 	}
 	
 	/*
@@ -123,7 +125,7 @@ public final class OTPAuthenticationTest {
 	    System.out.println("Base64: " + base64 + " (" + base64.length() + ")");
 	    //itYtQF9F47w4eHfe+fUfBMYL7G4= (28)
 	    
-	    return qrcode(hex);
+	    return hex;
 	}
 	
 	private static String qrcode(String hex) throws Exception{
@@ -136,7 +138,7 @@ public final class OTPAuthenticationTest {
 	}
 	
 	private static OTPAuthentication mockOTPAuth(byte[] secret) {
-		OTPAuthentication o = new OTPAuthentication(secret, "Serpro", "estevaocm@serpro.gov.br", HMACAlgorithmEnum.SHA1, 6, 30);
+		OTPAuthentication o = new OTPAuthentication(secret, "DNIT-SGPD", "savio@serpro.gov.br", HMACAlgorithmEnum.SHA1, 6, 30);
 		return o;
 	}
 	
