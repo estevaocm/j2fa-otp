@@ -29,8 +29,8 @@ public final class OTPAuthenticationTest {
 		String secret = null;
 		//secret = generate();
 		
-		//secret = "97AB9B4248BFE25C51BA2EB805BEC41774A8CB3F";//Estevao
-		secret = "F77DA3B3BFCC009908BA45BE718DC7D9F884A1B0";//Savio
+		//secret = "97AB9B4248BFE25C51BA2EB805BEC41774A8CB3F";//Estevao test
+		secret = "F77DA3B3BFCC009908BA45BE718DC7D9F884A1B0";//Savio test
 		qrcode(secret);
 		
 		verify(secret);
