@@ -144,7 +144,7 @@ public final class OTPAuthenticationTest {
 	
 	private static void verify(String secret) {
 		if(secret == null || secret.isEmpty()) {
-			secret = "97AB9B4248BFE25C51BA2EB805BEC41774A8CB3F";
+			return;
 		}
 		OTPAuthentication o = mockOTPAuth(ByteUtils.hexToBytes(secret));
 		System.out.println("TOTP code: " + o.password());
