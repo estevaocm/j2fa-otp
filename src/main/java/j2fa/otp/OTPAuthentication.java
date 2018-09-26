@@ -155,6 +155,9 @@ public class OTPAuthentication {
 	 * @return The TOTP code for the given Unix time.
 	 */
 	public String generate(long unixTime) {
+		if(this.period == null) {
+			throw new IllegalStateException("This is an instance of HOTP, not TOTP.");
+		}
 		long time = (unixTime/1000L)/this.period;
 		int digits = 6;
 		if(this.digits != null) {
@@ -174,6 +177,9 @@ public class OTPAuthentication {
 	 * @see Sections 5.2 and 6 of https://tools.ietf.org/html/rfc6238
 	 */
 	public String generate(long unixTime, double step) {
+		if(this.period == null) {
+			throw new IllegalStateException("This is an instance of HOTP, not TOTP.");
+		}
 		return generate(unixTime + (int)(step * this.period));
 	}
 }
