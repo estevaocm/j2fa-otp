@@ -96,7 +96,7 @@ public class OTPAuth {
 		if(this.digits != null) {
 			digits = this.digits;
 		}
-		return TimeBasedOneTimePassword.generate(this.secret, time, digits, HMACAlgorithm.SHA1);
+		return OneTimePassword.generate(this.secret, time, digits, HMACAlgorithm.SHA1);
 	}
 
 	/**

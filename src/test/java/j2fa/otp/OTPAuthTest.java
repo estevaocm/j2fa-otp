@@ -98,7 +98,7 @@ public final class OTPAuthTest {
 	}
 	
 	private static String generate() throws Exception{
-		byte[] randomSeed = CryptoUtils.randomSeed(20);
+		byte[] randomSeed = CryptoUtils.randomSeed(20);//160 bits key recommended by the HOTP RFC
 	    System.out.println("Byte array: " + Arrays.toString(randomSeed));
 	    //[-118, -42, 45, 64, 95, 69, -29, -68, 56, 120, 119, -34, -7, -11, 31, 4, -58, 11, -20, 110]
 
