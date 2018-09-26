@@ -5,6 +5,11 @@ import java.util.List;
 
 import org.apache.commons.codec.binary.Base32;
 
+/**
+ * 
+ * @author Steven Monteiro
+ *
+ */
 public class OTPAuth {
 	
 	private String type = "totp";//TODO hotp
@@ -12,7 +17,7 @@ public class OTPAuth {
 	private String account;
 	private byte[] secret; 
 	private String secretBase32; 
-	private HMACAlgorithm algo;
+	private HMACAlgorithmEnum algo;
 	private Integer digits;
 	private Integer period;
 	private Integer counter;//REQUIRED if type is hotp: The counter parameter is required when provisioning a key for use with HOTP. It will set the initial counter value.
@@ -27,7 +32,7 @@ public class OTPAuth {
 	 * @param period TOTP code validity period in seconds. Recommended: 30 seconds.
 	 */
 	public OTPAuth(byte[] secret, String issuer, String account,  
-			HMACAlgorithm algo, Integer digits, Integer period) {
+			HMACAlgorithmEnum algo, Integer digits, Integer period) {
 		if(secret == null || secret.length == 0) {
 			throw new IllegalArgumentException("secret");
 		}
@@ -96,7 +101,7 @@ public class OTPAuth {
 		if(this.digits != null) {
 			digits = this.digits;
 		}
-		return HmacOneTimePassword.generate(this.secret, time, digits, HMACAlgorithm.SHA1);
+		return HmacOneTimePassword.generate(this.secret, time, digits, HMACAlgorithmEnum.SHA1);
 	}
 
 	/**

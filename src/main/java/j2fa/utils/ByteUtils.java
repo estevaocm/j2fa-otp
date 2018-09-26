@@ -3,6 +3,11 @@ package j2fa.utils;
 import java.math.BigInteger;
 import java.util.Arrays;
 
+/**
+ * 
+ * @author Steven Monteiro
+ *
+ */
 public final class ByteUtils {
 	
 	private static final char[] HEX_CHARS = "0123456789ABCDEF".toCharArray();

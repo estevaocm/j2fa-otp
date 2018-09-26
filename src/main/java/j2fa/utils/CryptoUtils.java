@@ -9,8 +9,13 @@ import java.security.SecureRandom;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-import j2fa.otp.HMACAlgorithm;
+import j2fa.otp.HMACAlgorithmEnum;
 
+/**
+ * 
+ * @author Steven Monteiro
+ *
+ */
 public final class CryptoUtils {
 
 	private static final SecureRandom RANDOM = new SecureRandom();
@@ -58,7 +63,7 @@ public final class CryptoUtils {
 	 */
 	public static byte[] hmacSha1(byte[] keyBytes, byte[] text){
 		try {
-			return hmacSha(HMACAlgorithm.SHA1.desc(), keyBytes, text);
+			return hmacSha(HMACAlgorithmEnum.SHA1.desc(), keyBytes, text);
 		} catch (UndeclaredThrowableException nsae) {
 			return hmacSha("HMAC-SHA-1", keyBytes, text);
 		}

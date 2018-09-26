@@ -10,6 +10,7 @@ import j2fa.utils.CryptoUtils;
  * <p>Based on code by Loren Hart and Johan Rydell. 
  * @see https://tools.ietf.org/html/rfc4226
  * @see https://tools.ietf.org/html/rfc6238
+ * @author Steven Monteiro
  */
 public class HmacOneTimePassword {
 	
@@ -33,7 +34,7 @@ public class HmacOneTimePassword {
 	 *
 	 * @return: a numeric String in base 10 that includes {@link DIGITS_POWER} digits
 	 */
-	public static String generate(byte[] key, byte[] movingFactor, int returnDigits, HMACAlgorithm algo){
+	public static String generate(byte[] key, byte[] movingFactor, int returnDigits, HMACAlgorithmEnum algo){
 		byte[] hash = CryptoUtils.hmacSha(algo.desc(), key, movingFactor);
 		// put selected bytes into result int
 		int offset = offset(hash);
@@ -51,7 +52,7 @@ public class HmacOneTimePassword {
 	 *
 	 * @return: a numeric String in base 10 that includes {@link DIGITS_POWER} digits
 	 */
-	public static String generate(byte[] key, long movingFactor, int returnDigits, HMACAlgorithm algo){
+	public static String generate(byte[] key, long movingFactor, int returnDigits, HMACAlgorithmEnum algo){
 		return generate(key, ByteUtils.longToBytes(movingFactor), returnDigits, algo);
 	}
 	
@@ -64,7 +65,7 @@ public class HmacOneTimePassword {
 	 * @return: a numeric String in base 10 that includes {@link DIGITS_POWER} digits
 	 */
 	public static String generate(byte[] key, byte[] movingFactor){
-		return generate(key, movingFactor, 6, HMACAlgorithm.SHA1);
+		return generate(key, movingFactor, 6, HMACAlgorithmEnum.SHA1);
 	}
 	
 	/**
@@ -77,7 +78,7 @@ public class HmacOneTimePassword {
 	 *
 	 * @return: a numeric String in base 10 that includes {@link DIGITS_POWER} digits
 	 */
-	public static String generate(String key, String movingFactor, String returnDigits, HMACAlgorithm algo){
+	public static String generate(String key, String movingFactor, String returnDigits, HMACAlgorithmEnum algo){
 		return generate(ByteUtils.hexToBytes(key), hex16toBytes(movingFactor), Integer.decode(returnDigits), algo);
 	}
 	
@@ -96,7 +97,7 @@ public class HmacOneTimePassword {
 	 * plus the optional checksum digit if requested.
 	 */
 	public static String generate(byte[] secret, byte[] movingFactor, int codeDigits,
-			boolean addChecksum, int truncationOffset, HMACAlgorithm algo){
+			boolean addChecksum, int truncationOffset, HMACAlgorithmEnum algo){
 		
 		// compute hmac hash
 		byte[] hash = CryptoUtils.hmacSha(algo.desc(), secret, movingFactor);
@@ -116,7 +117,7 @@ public class HmacOneTimePassword {
 	}
 	
 	public static String generate(byte[] secret, long movingFactor, int codeDigits,
-			boolean addChecksum, int truncationOffset, HMACAlgorithm algo){
+			boolean addChecksum, int truncationOffset, HMACAlgorithmEnum algo){
 		return generate(secret, ByteUtils.longToBytes(movingFactor), codeDigits, 
 				addChecksum, truncationOffset, algo);
 	}
