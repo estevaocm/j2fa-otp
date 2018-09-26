@@ -145,7 +145,7 @@ public final class OTPAuthTest {
 			secret = "97AB9B4248BFE25C51BA2EB805BEC41774A8CB3F";
 		}
 		OTPAuthentication o = mockOTPAuth(ByteUtils.hexToBytes(secret));
-		System.out.println("TOTP code: " + o.generate());
+		System.out.println("TOTP code: " + o.password());
 	}
 	
 }

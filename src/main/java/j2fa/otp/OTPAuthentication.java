@@ -23,18 +23,35 @@ public class OTPAuthentication {
 	private Long counter; 
 	
 	/**
-	 * 
+	 * Constructor for TOTP.
 	 * @param secret Secret key.
 	 * @param issuer Issuer of the code and account.
 	 * @param account User account. Typically the user's e-mail address.
 	 * @param algo OTP hash algorithm: SHA1 (default), SHA256, or SHA512.  
 	 * @param digits Number of digits in the code. Recommended: 6 or 8.
 	 * @param period TOTP code validity period in seconds. Recommended: 30 seconds. 
-	 * 		Required when provisioning a key for use with THOTP. Must be null for HOTP.
-	 * @param counter Initial HOTP counter value. Required when provisioning a key for use with HOTP.
-	 * 		Must be null fo TOTP.
+	 * 		Required when provisioning a key for use with TOTP.
 	 */
 	public OTPAuthentication(byte[] secret, String issuer, String account,  
+			HMACAlgorithmEnum algo, Integer digits, Integer period) {
+		this(secret, issuer, account, algo, digits, period, null);
+	}
+	
+	/**
+	 * Constructor for HOTP.
+	 * @param secret Secret key.
+	 * @param issuer Issuer of the code and account.
+	 * @param account User account. Typically the user's e-mail address.
+	 * @param algo OTP hash algorithm: SHA1 (default), SHA256, or SHA512.  
+	 * @param digits Number of digits in the code. Recommended: 6 or 8.
+	 * @param counter Initial HOTP counter value. Required when provisioning a key for use with HOTP.
+	 */
+	public OTPAuthentication(byte[] secret, String issuer, String account,  
+			HMACAlgorithmEnum algo, Integer digits, Long counter) {
+		this(secret, issuer, account, algo, digits, null, counter);
+	}
+	
+	private OTPAuthentication(byte[] secret, String issuer, String account,  
 			HMACAlgorithmEnum algo, Integer digits, Integer period, Long counter) {
 		if(secret == null || secret.length == 0) {
 			throw new IllegalArgumentException("secret");
@@ -67,35 +84,6 @@ public class OTPAuthentication {
 		
 		this.issuer = issuer;
 		this.account = account;
-	}
-	
-	/**
-	 * @param secret Secret key.
-	 * @param issuer Issuer of the code and account.
-	 * @param account User account. Typically the user's e-mail address.
-	 * @param algo OTP hash algorithm: SHA1 (default), SHA256, or SHA512.  
-	 * @param digits Number of digits in the code. Recommended: 6 or 8.
-	 * @param period TOTP code validity period in seconds. Recommended: 30 seconds. 
-	 * 		Required when provisioning a key for use with THOTP. Must be null for HOTP.
-	 */
-	public OTPAuthentication(byte[] secret, String issuer, String account,  
-			HMACAlgorithmEnum algo, Integer digits, Integer period) {
-		this(secret, issuer, account, algo, digits, period, null);
-	}
-	
-	/**
-	 * Constructor for HOTP.
-	 * @param secret Secret key.
-	 * @param issuer Issuer of the code and account.
-	 * @param account User account. Typically the user's e-mail address.
-	 * @param algo OTP hash algorithm: SHA1 (default), SHA256, or SHA512.  
-	 * @param digits Number of digits in the code. Recommended: 6 or 8.
-	 * @param counter Initial HOTP counter value. Required when provisioning a key for use with HOTP.
-	 * 		Must be null fo TOTP.
-	 */
-	public OTPAuthentication(byte[] secret, String issuer, String account,  
-			HMACAlgorithmEnum algo, Integer digits, Long counter) {
-		this(secret, issuer, account, algo, digits, null, counter);
 	}
 	
 	/**
@@ -139,13 +127,13 @@ public class OTPAuthentication {
 	 * 
 	 * @return The OTP code for the current Unix time, if TOTP, or for the next counter, if HOTP.
 	 */
-	public String generate() {
+	public String password() {
 		if(this.counter == null) {
-			return generate(System.currentTimeMillis());
+			return password(System.currentTimeMillis());
 		}
 		else {
 			this.counter++;
-			return generate(this.counter);
+			return password(this.counter);
 		}
 	}
 
@@ -154,7 +142,7 @@ public class OTPAuthentication {
 	 * @param unixTime
 	 * @return The TOTP code for the given Unix time.
 	 */
-	public String generate(long unixTime) {
+	public String password(long unixTime) {
 		if(this.period == null) {
 			throw new IllegalStateException("This is an instance of HOTP, not TOTP.");
 		}
@@ -176,10 +164,10 @@ public class OTPAuthentication {
 	 * @return 
 	 * @see Sections 5.2 and 6 of https://tools.ietf.org/html/rfc6238
 	 */
-	public String generate(long unixTime, double step) {
+	public String password(long unixTime, double step) {
 		if(this.period == null) {
 			throw new IllegalStateException("This is an instance of HOTP, not TOTP.");
 		}
-		return generate(unixTime + (int)(step * this.period));
+		return password(unixTime + (int)(step * this.period));
 	}
 }
