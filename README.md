@@ -6,4 +6,4 @@ Simply instantiate with either the TOTP or the HOTP constructor,
 then call setupPath() to get the setup address
 (which can be codified to a QR matriz using the QRCode class), 
 then password() to compute the password code.
-To generate the secret key, you may use CryptoUtils.randomSeed(20).
+To generate the required secret key, you may use CryptoUtils.randomSeed(20).
