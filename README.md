@@ -1,9 +1,10 @@
 # j2fa-otp
 Library for one-time passwords for two-factor authentication. Supports TOTP and HOTP.
 
+First of all, you will need to generate a random secret key, at least 20 bytes long.
+You may call the included CryptoUtils.randomSeed(20) or use your own implementation.
 The OTPAuthentication class provides the authentication services.
 Simply instantiate with either the TOTP or the HOTP constructor, 
 then call setupPath() to get the setup address
 (which can be codified to a QR matriz using the QRCode class), 
 then password() to compute the password code.
-To generate the required secret key, you may use CryptoUtils.randomSeed(20).
