@@ -7,5 +7,5 @@ The OTPAuthentication class provides the authentication services.
 Simply instantiate with either the TOTP or the HOTP constructor, 
 then call setupPath() to get the setup address
 (which can be codified to a QR matriz using the QRCode class).
-After the client sets up their device, call password() to compute the password code
+After the client sets up their device, call password() to compute the passcode
 and verify the user input.
